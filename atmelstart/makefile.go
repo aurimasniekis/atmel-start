@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"regexp"
 	"sort"
-	"strings"
 	"text/template"
 
 	"path"
@@ -78,9 +77,6 @@ type Data struct {
 	// Paths to the directories to include.
 	IncludeDirs []string
 
-	// Startup File: 'samd21a/gcc/gcc/startup_samd21.c'
-	StartupFile string
-
 	// Path to the linker script.
 	LinkerScript string
 
@@ -146,11 +142,6 @@ func (data *Data) parseSourceFiles(text string) {
 	found := regexSourceFiles.FindAllStringSubmatch(text, -1)
 	for _, f := range found {
 		if len(f) > 1 {
-			if strings.Contains(f[1], "startup_") {
-				data.StartupFile = f[1] + `.c`
-				continue
-			}
-
 			if f[1] != "main" {
 				data.SourceFiles = append(data.SourceFiles, f[1]+`.c`)
 			}

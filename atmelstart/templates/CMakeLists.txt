@@ -4,8 +4,10 @@ include_guard()
 # Atmel Start root directory.
 set(ATMEL_START_DIR ${CMAKE_CURRENT_LIST_DIR} CACHE PATH "Path to .atstart" FORCE)
 
-# Atmel Start code as static library
-add_library(atstart STATIC
+macro(atstart_add_to target)
+
+# Add Atmel Start code as sources
+target_sources(${target} PUBLIC
     # Source files extracted from 'gcc/Makefile'.
     {{- range .SourceFiles}}
     "${ATMEL_START_DIR}/{{.}}"
@@ -13,30 +15,31 @@ add_library(atstart STATIC
 )
 
 # Include directories extracted from 'gcc/Makefile'.
-target_include_directories(atstart PUBLIC
+target_include_directories(${target} PUBLIC
     {{- range .IncludeDirs}}
     "${ATMEL_START_DIR}/{{.}}"
     {{- end}}
 )
 
 # Bare minimum compiler options
-target_compile_options(atstart PUBLIC
+target_compile_options(${target} PUBLIC
    -mthumb
    -mcpu={{.CPU}}
    -D__{{.Device}}__
 )
 
 # Bare minimum linker options
-target_link_options(atstart PUBLIC
+target_link_options(${target} PUBLIC
    -mthumb
    -mcpu={{.CPU}}
    -D__{{.Device}}__
 )
+endmacro()
 
 # Apply the default flags that used to be in the toolchain.cmake file previously
 # by calling this macro
-macro(atstart_use_default_flags)
-   target_compile_options(atstart PUBLIC
+macro(atstart_use_default_flags target)
+   target_compile_options(${target} PUBLIC
       -ffunction-sections
       -fdata-sections
       -mlong-calls
@@ -44,17 +47,13 @@ macro(atstart_use_default_flags)
       $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>
       $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions>
    )
-   target_link_options(atstart PUBLIC
+   target_link_options(${target} PUBLIC
       LINKER:--start-group
       -lm
       LINKER:--end-group
       --specs=nano.specs
       LINKER:--gc-sections
       "-T${ATMEL_START_DIR}/{{.LinkerScript}}"
-      {{- range .IncludeDirs}}
-      "-I${ATMEL_START_DIR}/{{.}}"
-      {{- end}}
-      "${ATMEL_START_DIR}/{{.StartupFile}}"
    )
 endmacro()
 
