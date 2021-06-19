@@ -167,6 +167,9 @@ func (e *editor) callbackSave() error {
 			if err := confYAML.WriteToFile(configFileName); err != nil {
 				return errors.Wrap(err, "save configuration")
 			}
+			if err := e.currConfJSON.WriteToFile(configJsonFileName); err != nil {
+				return errors.Wrap(err, "save json configuration")
+			}
 
 			logrus.Info("configuration file written")
 		}

@@ -26,6 +26,13 @@ target_compile_options(atstart PUBLIC
    -D__{{.Device}}__
 )
 
+# Bare minimum linker options
+target_link_options(atstart PUBLIC
+   -mthumb
+   -mcpu={{.CPU}}
+   -D__{{.Device}}__
+)
+
 # Apply the default flags that used to be in the toolchain.cmake file previously
 # by calling this macro
 macro(atstart_use_default_flags)
@@ -44,6 +51,10 @@ macro(atstart_use_default_flags)
       --specs=nano.specs
       LINKER:--gc-sections
       "-T${ATMEL_START_DIR}/{{.LinkerScript}}"
+      {{- range .IncludeDirs}}
+      "-I${ATMEL_START_DIR}/{{.}}"
+      {{- end}}
+      "${ATMEL_START_DIR}/{{.StartupFile}}"
    )
 endmacro()
 

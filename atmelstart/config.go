@@ -43,7 +43,8 @@ const (
 	hiddenDirName = `.atstart`
 
 	// Default name of the configuration file.
-	configFileName = `atstart.yaml`
+	configFileName     = `atstart.yaml`
+	configJsonFileName = `atstart.json`
 )
 
 func findParentDirWith(startDir string, searchedFile string, maxDepth int) (string, error) {
@@ -94,11 +95,14 @@ func CMake(args []string) error {
 }
 
 func Generate() error {
-	var configYAML configYAML
-	if err := configYAML.ReadFromFile(configFileName); err != nil {
-		return errors.Wrap(err, "read configuration file")
+	var configJSON configJSON
+	if err := configJSON.ReadFromFile(configJsonFileName); err != nil {
+		return errors.Wrap(err, "read json configuration file")
 	}
-	generatedZIPReader, err := configYAML.requestGenerate()
+
+	configJSON.byteSlice = append([]byte(`{`+jsonTweak+`,`), configJSON.byteSlice[1:]...)
+
+	generatedZIPReader, err := configJSON.requestGenerate()
 	if err != nil {
 		return err
 	}

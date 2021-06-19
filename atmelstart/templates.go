@@ -212,24 +212,25 @@ var _escData = map[string]*_escFile{
 	"/templates/CMakeLists.txt": {
 		name:    "CMakeLists.txt",
 		local:   "templates/CMakeLists.txt",
-		size:    2309,
-		modtime: 1621175210,
+		size:    2553,
+		modtime: 1624144184,
 		compressed: `
-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
+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
 `,
 	},
 
@@ -237,7 +238,7 @@ Hp0M+Vf4yYGhvaGFceNF94u2Lz1dN/2vvPvdnSGGfq+b//U9nZWfSPD2QJd/BgAA///di55mBQkAAA==
 		name:    "toolchain.cmake",
 		local:   "templates/toolchain.cmake",
 		size:    4099,
-		modtime: 1621173184,
+		modtime: 1624081462,
 		compressed: `
 H4sIAAAAAAAC/7RWXW+jShJ9968okZHWVgZbmkj7MNI+YGg7reHD2+AJ2RfUgQa3Bhov4My1Rv7vV40N
 Bpskk3tz85IIqk6dOlWnSJjRHyzIuODZLgsK9v8dL1g0/o6Iix0b7qb/noxGN+DleRpuKBcQ85RBlUOY
